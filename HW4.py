@@ -201,21 +201,42 @@ def cancelSales():
     #Get user input for transaction to cancel
     cancelID = input("Enter transaction ID to cancel: ")
 
-    #Update Transaction
-    print("\nCanceling transaction.")
-    executeUpdate(f"UPDATE Sales SET STATUS = 'Reversed' WHERE TRANS_ID = {cancelID};")
-
     #Display Updated Table
     print("\nPrinting transaction.")
     executeSelect(f"SELECT * FROM Sales M WHERE TRANS_ID = {cancelID};")
 
-    #Update Stock
-    print("\nUpdating Inventory.")
-    #executeUpdate(f"")
+    cursor.execute(f"SELECT * FROM Sales M WHERE TRANS_ID = {cancelID};")
+    res = (cursor.fetchone())
 
-    #Display Stock
-    print("\nPrinting updated inventory.")
-    #executeSelect(f"")
+    #If nothing has been returned, return to the main menu
+    if res is None:
+        print(f"Transaction #{cancelID} does not exist. Returning to main menu.")
+        return
+    elif "Reversed" not in res:
+        #Update Transaction
+        print("\nCanceling transaction.")
+        executeUpdate(f"UPDATE Sales SET STATUS = 'Reversed' WHERE TRANS_ID = {cancelID};")
+
+        #Update Stock
+        cursor.execute(f"SELECT * FROM Sales M WHERE TRANS_ID = {cancelID};")
+        res = (cursor.fetchone())
+        if "Reversed" in res:
+            print("\nUpdating Inventory.")
+            executeUpdate(f"UPDATE Inventory_MGMT im LEFT JOIN Sales s ON s.Item_ID = im.Item_ID SET im.Total_Available = (im.Total_Available + 1) WHERE s.TRANS_ID = {cancelID} AND s.STATUS = 'Reversed';")
+        else:
+            print(f"\nTransaction #{cancelID} has already been returned. Returning to main menu.")
+            return
+    elif "Reversed" in res:
+        print(f"\nTransaction #{cancelID} has already been returned. Returning to main menu.")
+        return
+
+    #Show updated transaction
+    print("\nUpdated transaction shown below.")
+    executeSelect(f"SELECT * FROM Sales WHERE TRANS_ID = {cancelID};")
+
+    #Show the current stock
+    print("\nCurrent stock of item shown below.")
+    executeSelect(f"SELECT im.ITEM_ID, im.SUPPLIER_ID, im.TOTAL_ITEM_SALES_3_MONTHS, im.TOTAL_AVAILABLE FROM Sales s LEFT JOIN Inventory_MGMT im ON im.ITEM_ID = s.ITEM_ID WHERE s.TRANS_ID = {cancelID} AND im.TOTAL_ITEM_SALES_3_MONTHS != 0")
 
 
 def executeUpdate(query):  # use this function for delete and update
@@ -251,7 +272,7 @@ while select != 6:
     elif select == 5:
         cancelSales()
     else:
-        print("Invalid Option")
+            print("Invalid Option")
 
     #Reprint if invalid
     print()
