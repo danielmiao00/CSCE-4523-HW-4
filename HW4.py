@@ -118,8 +118,16 @@ def employeePerformance():
 
 
 def updateItem():
+    coffeeNames = ["ANTIGUA", "HAMBELA KIRITE", "KHAWLANI", "MOGIANA", "ALWADI", "VOLCANICA SUPREMO", "PNG",
+                   "SUMATRA GAYO", "ARABICA", "GENERAL MERCHANDISE", "SIDAMO", "GHIMBI", "ALDURRAR"]
+
     # Get the item name to update
     itemName = input("Enter the name of the item to update: ")
+    itemName = itemName.upper()
+    if itemName not in coffeeNames:
+        print(f"{itemName} does not exist in the inventory.")
+        return
+
     supplierID = int(input("Enter the supplier ID of the item: "))
 
     # Flag for while loop; while the flag is false (or not an integer), loop for a valid input
