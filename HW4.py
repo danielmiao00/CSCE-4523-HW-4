@@ -33,6 +33,9 @@ def executeSelect(query):
     cursor.execute(query)
     printFormat(cursor.fetchall())
 
+def executeOnly(query):
+    cursor.execute(query)
+    cursor.fetchall()
 
 def insert(table, values):
     query = "INSERT into " + table + " values (" + values + ")" + ';'
@@ -110,13 +113,20 @@ def addSupplier():
 
 def employeePerformance():
     # Get user input for employee
-    employeeName = input("Enter the name employee or performance check: ")
+    employeeName = input("Enter the name employee or performance check: ").upper()
 
 
 
-    # Display the supplier for the given country
-    print(f"Current availability for {employeeName} shown below.")
-    employeeResult = executeSelect(f"SELECT I.NAME as 'Name', I.ROASTING_TYPE as 'Roasting Type', COUNT(I.NAME) as 'Sales Count' FROM Sales M LEFT JOIN Item I ON I.ID = M.ITEM_ID LEFT JOIN Employee E ON E.ID = M.EMPLOYEE_ID WHERE E.NAME = '{employeeName}' GROUP BY I.NAME, I.ROASTING_TYPE;", (I.NAME))
+    # Display the employee sales
+    print(f"Total sales for {employeeName} shown below.")
+    executeOnly(f"SELECT I.NAME as 'Name', I.ROASTING_TYPE as 'Roasting Type', COUNT(I.NAME) as 'Sales Count' FROM Sales M LEFT JOIN Item I ON I.ID = M.ITEM_ID LEFT JOIN Employee E ON E.ID = M.EMPLOYEE_ID WHERE E.NAME = '{employeeName}' GROUP BY I.NAME, I.ROASTING_TYPE;")
+
+
+    #Check if employee has no sales
+    if cursor.rowcount == 0:
+        print(f"{employeeName} has sold no items")
+    else:
+        executeSelect(f"SELECT I.NAME as 'Name', I.ROASTING_TYPE as 'Roasting Type', COUNT(I.NAME) as 'Sales Count' FROM Sales M LEFT JOIN Item I ON I.ID = M.ITEM_ID LEFT JOIN Employee E ON E.ID = M.EMPLOYEE_ID WHERE E.NAME = '{employeeName}' GROUP BY I.NAME, I.ROASTING_TYPE;")
 
 
 def updateItem():
