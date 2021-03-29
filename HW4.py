@@ -95,7 +95,7 @@ def addSupplier():
     insert("Supplier",
            f"(SELECT (MAX(SUPPLIER_ID) + 1) FROM Supplier supp), '{newSupplier}', '{newSuppNum}', '{newSuppCountry}'")
 
-    # Insert new supplier into Inventory_Mgmt table
+    # Insert new supplier into Inventory_MGMT table
     insert("Inventory_MGMT",
            f"(SELECT ID FROM Item WHERE NAME = '{coffeeItem}'), (SELECT MAX(SUPPLIER_ID) FROM Supplier), 0, {totalAvailable}")
 
@@ -118,10 +118,14 @@ def employeePerformance():
 
 
 def updateItem():
+<<<<<<< HEAD
     coffeeNames = ["ANTIGUA", "HAMBELA KIRITE", "KHAWLANI", "MOGIANA", "ALWADI", "VOLCANICA SUPREMO", "PNG",
                    "SUMATRA GAYO", "ARABICA", "GENERAL MERCHANDISE", "SIDAMO", "GHIMBI", "ALDURRAR"]
 
     # Get the item name to update
+=======
+    #Get the item name to update
+>>>>>>> b2106df0ac7cccb5e85c165f16e6fd1c9f185722
     itemName = input("Enter the name of the item to update: ")
     itemName = itemName.upper()
     if itemName not in coffeeNames:
@@ -130,7 +134,7 @@ def updateItem():
 
     supplierID = int(input("Enter the supplier ID of the item: "))
 
-    # Flag for while loop; while the flag is false (or not an integer), loop for a valid input
+    #Flag for while loop; while the flag is false (or not an integer), loop for a valid input
     numFlag = False
     while numFlag == False:
         newAvailNum = input("Enter the item's new Total Availability: ")
@@ -140,20 +144,17 @@ def updateItem():
         except ValueError:
             print("Invalid amount. Please input an integer value.")
 
-    # Get the current availability for the item
+    #Get the current availability for the item
     print(f"Current availability for {itemName} shown below.")
-    executeSelect(
-        f"SELECT i.Name, im.Total_Available FROM Item i LEFT JOIN Inventory_Mgmt im ON i.ID = im.Item_ID WHERE i.Name = '{itemName}' AND im.Supplier_ID = '{supplierID}';")
+    executeSelect(f"SELECT i.Name, im.Total_Available FROM Item i LEFT JOIN Inventory_MGMT im ON i.ID = im.Item_ID WHERE i.Name = '{itemName}' AND im.Supplier_ID = '{supplierID}';")
 
-    # Update the item
+    #Update the item
     print(f"\nUpdating {itemName}")
-    executeUpdate(
-        f"UPDATE Inventory_Mgmt im, Item i SET Total_Available = {newAvailNum} WHERE i.ID = im.Item_ID AND i.Name = '{itemName}' AND im.Supplier_ID = '{supplierID}';")
+    executeUpdate(f"UPDATE Inventory_MGMT im, Item i SET Total_Available = {newAvailNum} WHERE i.ID = im.Item_ID AND i.Name = '{itemName}' AND im.Supplier_ID = '{supplierID}';")
 
-    # Display the updated values
+    #Display the updated values
     print(f"{itemName}'s total availability updated. {itemName}'s new availability shown below.")
-    executeSelect(
-        f"SELECT i.Name, im.Total_Available FROM Item i LEFT JOIN Inventory_Mgmt im ON i.ID = im.Item_ID WHERE i.Name = '{itemName}' AND im.Supplier_ID = '{supplierID}';")
+    executeSelect(f"SELECT i.Name, im.Total_Available FROM Item i LEFT JOIN Inventory_MGMT im ON i.ID = im.Item_ID WHERE i.Name = '{itemName}' AND im.Supplier_ID = '{supplierID}';")
 
 
 def cancelSales():
