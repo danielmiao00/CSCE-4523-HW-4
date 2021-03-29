@@ -70,7 +70,7 @@ def addSupplier():
     # itemFlag to control while loop for item ID input; makes sure that the ID is valid.
     itemFlag = False
     while itemFlag == False:
-        coffeeItem = input("Please enter the name of the coffee this supplier sells (In all caps): ")
+        coffeeItem = input("Please enter the name of the coffee this supplier sells: ")
         coffeeItem = coffeeItem.upper()
         try:
             if coffeeItem in coffeeNames:
@@ -86,7 +86,7 @@ def addSupplier():
         totalAvailable = input("Enter the supplier's current availability of their coffee: ")
         try:
             totalAvailable = int(totalAvailable)
-            if 1(totalAvailable >= 0):
+            if (totalAvailable >= 0):
                 availFlag = True
         except ValueError:
             print("Invalid amount. Please input an integer value.")
