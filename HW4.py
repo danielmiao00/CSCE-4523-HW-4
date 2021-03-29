@@ -62,24 +62,27 @@ def supplierCountry():
 
 
 def addSupplier():
-    # List of coffee names to use later on
-    coffeeNames = ["ANTIGUA", "HAMBELA KIRITE", "KHAWLANI", "MOGIANA", "ALWADI", "VOLCANICA SUPREMO", "PNG",
-                   "SUMATRA GAYO", "ARABICA", "GENERAL MERCHANDISE", "SIDAMO", "GHIMBI", "ALDURRAR"]
     # Get the new suppler name, phone number, and country
     newSupplier = input("Enter the name of the new supplier: ")
     newSuppNum = input("Enter the phone number of the new supplier: ")
     newSuppCountry = input("Enter the country where the new supplier is located: ")
 
-    # itemFlag to control while loop for item ID input; makes sure that the ID is valid.
+    # itemFlag to control while loop for item nameinput; makes sure that the item is a valid item.
     itemFlag = False
     while itemFlag == False:
         coffeeItem = input("Please enter the name of the coffee this supplier sells: ")
         coffeeItem = coffeeItem.upper()
         try:
-            if coffeeItem in coffeeNames:
-                itemFlag = True
-            else:
+            #Test input against Item database
+            executeOnly(f"SELECT NAME FROM Item WHERE NAME = '{coffeeItem}';")
+            
+            #If the rowcount is 0, the item is not in the table
+            if cursor.rowcount == 0:
                 print("Invalid coffee. Please select a valid coffee.")
+
+            #Else, item does exist in the table
+            else:
+                itemFlag = True
         except ValueError:
             print("Invalid input. Please try again.")
 
@@ -131,8 +134,40 @@ def employeePerformance():
 
 def updateItem():
     #Get the item name to update
-    itemName = input("Enter the name of the item to update: ")
-    supplierID = int(input("Enter the supplier ID of the item: "))
+    itemFlag = False
+    while itemFlag == False:
+        coffeeItem = input("Please enter the name of the item to update: ")
+        coffeeItem = coffeeItem.upper()
+        try:
+            #Test input against Item database
+            executeOnly(f"SELECT NAME FROM Item WHERE NAME = '{coffeeItem}';")
+            
+            #If the rowcount is 0, the item is not in the table
+            if cursor.rowcount == 0:
+                print("Item is not in the table. Please select a valid item.")
+
+            #Else, item does exist in the table
+            else:
+                itemFlag = True
+        except ValueError:
+            print("Invalid input. Please try again.")
+
+    supplierFlag = False
+    while supplierFlag == False:
+        supplierID = int(input("Please enter the ID this supplier: "))
+        try:
+            #Test input against Supplier database
+            executeOnly(f"SELECT SUPPLIER_ID FROM Supplier WHERE SUPPLIER_ID = {supplierID};")
+            
+            #If the rowcount is 0, the Supplier ID is not in the table
+            if cursor.rowcount == 0:
+                print("Supplier with this ID does not exist.")
+
+            #Else, Supplier_ID does exist in the table
+            else:
+                supplierFlag = True
+        except ValueError:
+            print("Invalid input. Please try again using a numeric ID.")
 
     #Flag for while loop; while the flag is false (or not an integer), loop for a valid input
     numFlag = False
@@ -145,16 +180,21 @@ def updateItem():
             print("Invalid amount. Please input an integer value.")
 
     #Get the current availability for the item
-    print(f"Current availability for {itemName} shown below.")
-    executeSelect(f"SELECT i.Name, im.Total_Available FROM Item i LEFT JOIN Inventory_MGMT im ON i.ID = im.Item_ID WHERE i.Name = '{itemName}' AND im.Supplier_ID = '{supplierID}';")
+    executeOnly(f"SELECT i.Name, im.Total_Available FROM Item i LEFT JOIN Inventory_MGMT im ON i.ID = im.Item_ID WHERE i.Name = '{coffeeItem}' AND im.Supplier_ID = '{supplierID}';")
+    if cursor.rowcount == 0:
+        print(f"Supplier #{supplierID} does not sell {coffeeItem}. Returning to main menu.")
+        return
+    else:
+        print(f"Current availability for {coffeeItem} sold by Supplier #{supplierID} shown below.")
+        executeSelect(f"SELECT i.Name, im.Total_Available FROM Item i LEFT JOIN Inventory_MGMT im ON i.ID = im.Item_ID WHERE i.Name = '{coffeeItem}' AND im.Supplier_ID = '{supplierID}';")
 
     #Update the item
-    print(f"\nUpdating {itemName}")
-    executeUpdate(f"UPDATE Inventory_MGMT im, Item i SET Total_Available = {newAvailNum} WHERE i.ID = im.Item_ID AND i.Name = '{itemName}' AND im.Supplier_ID = '{supplierID}';")
+    print(f"\nUpdating {coffeeItem}")
+    executeUpdate(f"UPDATE Inventory_MGMT im, Item i SET Total_Available = {newAvailNum} WHERE i.ID = im.Item_ID AND i.Name = '{coffeeItem}' AND im.Supplier_ID = '{supplierID}';")
 
     #Display the updated values
-    print(f"{itemName}'s total availability updated. {itemName}'s new availability shown below.")
-    executeSelect(f"SELECT i.Name, im.Total_Available FROM Item i LEFT JOIN Inventory_MGMT im ON i.ID = im.Item_ID WHERE i.Name = '{itemName}' AND im.Supplier_ID = '{supplierID}';")
+    print(f"{coffeeItem}'s total availability, sold by Supplier #{supplierID}, updated successfully. {coffeeItem}'s new availability shown below.")
+    executeSelect(f"SELECT i.Name, im.Total_Available FROM Item i LEFT JOIN Inventory_MGMT im ON i.ID = im.Item_ID WHERE i.Name = '{coffeeItem}' AND im.Supplier_ID = '{supplierID}';")
 
 
 def cancelSales():
