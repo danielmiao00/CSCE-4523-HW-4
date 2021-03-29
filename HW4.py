@@ -33,6 +33,7 @@ def executeSelect(query):
     cursor.execute(query)
     printFormat(cursor.fetchall())
 
+# Function to execute query, but NOT display. Use for logic checking
 def executeOnly(query):
     cursor.execute(query)
     cursor.fetchall()
@@ -42,6 +43,7 @@ def insert(table, values):
     cursor.execute(query)
     conn.commit()
 
+# Function creates the display for the menu
 def menu():
     print("Press [1] for Supplier By Country")
     print("Press [2] for Add Supplier")
@@ -52,13 +54,17 @@ def menu():
 
 def supplierCountry():
     # Get user input for country
-    countryName = input("Enter the name of country to check: ")
+    countryName = input("Enter the name of country to check: ").upper()
 
+    executeOnly(f"SELECT S.SUPPLIER_ID AS 'Supplier ID', S.NAME AS 'Supplier Name', S.PHONE_NUMBER as 'Phone Number', I.NAME AS 'Coffee Name', I.ROASTING_TYPE FROM Inventory_MGMT IM Left JOIN Item I ON I.ID = IM.ITEM_ID LEFT JOIN Supplier S ON S.SUPPLIER_ID = IM.SUPPLIER_ID WHERE S.COUNTRY =  '{countryName}';")
 
-    # Display the supplier for the given country
-    print(f"Current availability for {countryName} shown below.")
-    executeSelect(f"SELECT S.SUPPLIER_ID AS 'Supplier ID', S.NAME AS 'Supplier Name', S.PHONE_NUMBER as 'Phone Number', I.NAME AS 'Coffee Name', I.ROASTING_TYPE FROM Inventory_MGMT IM Left JOIN Item I ON I.ID = IM.ITEM_ID LEFT JOIN Supplier S ON S.SUPPLIER_ID = IM.SUPPLIER_ID WHERE S.COUNTRY =  '{countryName}';")
-
+    # Check if country has an empty set
+    if cursor.rowcount == 0:
+        print(f"{countryName} is not a valid country or has no suppliers.\n")
+    else:
+        print(f"Current availability for {countryName} shown below.")
+        executeSelect(f"SELECT S.SUPPLIER_ID AS 'Supplier ID', S.NAME AS 'Supplier Name', S.PHONE_NUMBER as 'Phone Number', I.NAME AS 'Coffee Name', I.ROASTING_TYPE FROM Inventory_MGMT IM Left JOIN Item I ON I.ID = IM.ITEM_ID LEFT JOIN Supplier S ON S.SUPPLIER_ID = IM.SUPPLIER_ID WHERE S.COUNTRY =  '{countryName}';")
+        print("\n")
 
 
 def addSupplier():
@@ -110,15 +116,12 @@ def addSupplier():
 
     # Print out all suppliers who supply the same coffee
     print("\nHere are all of the suppliers of the selected coffee.")
-    executeSelect(
-        f"SELECT s.NAME AS 'Supplier', i.NAME AS 'Coffee' FROM Supplier s LEFT JOIN Inventory_MGMT im ON s.SUPPLIER_ID = im.SUPPLIER_ID LEFT JOIN Item i ON i.ID = im.ITEM_ID WHERE i.NAME = '{coffeeItem}';")
+    executeSelect(f"SELECT s.NAME AS 'Supplier', i.NAME AS 'Coffee' FROM Supplier s LEFT JOIN Inventory_MGMT im ON s.SUPPLIER_ID = im.SUPPLIER_ID LEFT JOIN Item i ON i.ID = im.ITEM_ID WHERE i.NAME = '{coffeeItem}';")
 
 
 def employeePerformance():
     # Get user input for employee
     employeeName = input("Enter the name employee or performance check: ").upper()
-
-
 
     # Display the employee sales
     print(f"Total sales for {employeeName} shown below.")
@@ -127,7 +130,7 @@ def employeePerformance():
 
     #Check if employee has no sales
     if cursor.rowcount == 0:
-        print(f"{employeeName} has sold no items")
+        print(f"{employeeName} has sold no items\n")
     else:
         executeSelect(f"SELECT I.NAME as 'Name', I.ROASTING_TYPE as 'Roasting Type', COUNT(I.NAME) as 'Sales Count' FROM Sales M LEFT JOIN Item I ON I.ID = M.ITEM_ID LEFT JOIN Employee E ON E.ID = M.EMPLOYEE_ID WHERE E.NAME = '{employeeName}' GROUP BY I.NAME, I.ROASTING_TYPE;")
 
@@ -250,8 +253,8 @@ def close_db():  # use this function to close db
 
 
 ##### Test #######
-mysql_username = 'dmiao'  # please change to your username
-mysql_password = 'bieYuj0b'  # please change to your MySQL password
+mysql_username = 'dmiao'  # MYSQL Username
+mysql_password = 'bieYuj0b'  # MYSQL Password
 mysql_host = 'turing.uark.edu'
 
 open_database(mysql_host, mysql_username, mysql_password, mysql_username)  # open database
@@ -259,7 +262,20 @@ open_database(mysql_host, mysql_username, mysql_password, mysql_username)  # ope
 
 #Menu creation
 menu()
-select = int(input("Enter Option: "))
+
+#Check if input is a valid int
+numInt = False
+while numInt == False:
+    select = input("Enter Option: ")
+    try:
+        select = int(select)
+        numInt = True
+    except ValueError:
+        print("Input is invalid\n")
+        menu()
+
+
+#Check if int input is on the list
 while select != 6:
     if select == 1:
         supplierCountry()
@@ -272,38 +288,14 @@ while select != 6:
     elif select == 5:
         cancelSales()
     else:
-            print("Invalid Option")
+        print("Invalid Option\n")
 
     #Reprint if invalid
-    print()
     menu()
     select = int(input("Enter Option: "))
 
-#print(' ')
-#print('Testing select: ')
-#print('=======================================')
-#executeSelect('SELECT * FROM Item');
-
-#print(' ')
-#print('Testing insert item 22: ')
-#print('=======================================')
-#insert('Item', "22,'test',23.5,'M'")
-#executeSelect('SELECT * FROM Item where id = 22;')
-
-#print(' ')
-#print('Testing delete item 22: ')
-#print('=======================================')
-#executeUpdate('delete from Item where id = 22;')
-#executeSelect('SELECT * FROM Item where id = 22;')
-
-#print(' ')
-#print('Testing update of address to Jordan for supplier 3: ');
-#print('=======================================')
-#executeSelect("SELECT * FROM Supplier where SUPPLIER_ID = 3;")
-#executeUpdate("Update Supplier set COUNTRY = 'JORDAN' where SUPPLIER_ID = 3;")
-#executeSelect("SELECT * FROM Supplier where SUPPLIER_ID = 3;")
-
-close_db()  # close database
+# Close database
+close_db()
 
 
 
