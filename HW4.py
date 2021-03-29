@@ -158,7 +158,25 @@ def updateItem():
 
 
 def cancelSales():
-    pass
+    #Get user input for transaction to cancel
+    cancelID = input("Enter transaction ID to cancel: ")
+
+    #Update Transaction
+    print("\nCanceling transaction.")
+    executeUpdate(f"UPDATE Sales SET STATUS = 'Reversed' WHERE TRANS_ID = {cancelID};")
+
+    #Display Updated Table
+    print("\nPrinting transaction.")
+    executeSelect(f"SELECT * FROM Sales M WHERE TRANS_ID = {cancelID};")
+
+    #Update Stock
+    print("\nUpdating Inventory.")
+    #executeUpdate(f"")
+
+    #Display Stock
+    print("\nPrinting updated inventory.")
+    #executeSelect(f"")
+
 
 def executeUpdate(query):  # use this function for delete and update
     cursor.execute(query)
