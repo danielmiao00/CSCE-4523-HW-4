@@ -56,15 +56,9 @@ def supplierCountry():
     # Get user input for country
     countryName = input("Enter the name of country to check: ").upper()
 
-    executeOnly(f"SELECT S.SUPPLIER_ID AS 'Supplier ID', S.NAME AS 'Supplier Name', S.PHONE_NUMBER as 'Phone Number', I.NAME AS 'Coffee Name', I.ROASTING_TYPE FROM Inventory_MGMT IM Left JOIN Item I ON I.ID = IM.ITEM_ID LEFT JOIN Supplier S ON S.SUPPLIER_ID = IM.SUPPLIER_ID WHERE S.COUNTRY =  '{countryName}';")
-
-    # Check if country has an empty set
-    if cursor.rowcount == 0:
-        print(f"{countryName} is not a valid country or has no suppliers.\n")
-    else:
-        print(f"Current availability for {countryName} shown below.")
-        executeSelect(f"SELECT S.SUPPLIER_ID AS 'Supplier ID', S.NAME AS 'Supplier Name', S.PHONE_NUMBER as 'Phone Number', I.NAME AS 'Coffee Name', I.ROASTING_TYPE FROM Inventory_MGMT IM Left JOIN Item I ON I.ID = IM.ITEM_ID LEFT JOIN Supplier S ON S.SUPPLIER_ID = IM.SUPPLIER_ID WHERE S.COUNTRY =  '{countryName}';")
-        print("\n")
+    print(f"Current availability for {countryName} shown below.")
+    executeSelect(f"SELECT S.SUPPLIER_ID AS 'Supplier ID', S.NAME AS 'Supplier Name', S.PHONE_NUMBER as 'Phone Number', I.NAME AS 'Coffee Name', I.ROASTING_TYPE FROM Inventory_MGMT IM Left JOIN Item I ON I.ID = IM.ITEM_ID LEFT JOIN Supplier S ON S.SUPPLIER_ID = IM.SUPPLIER_ID WHERE S.COUNTRY =  '{countryName}';")
+    print("\n")
 
 
 def addSupplier():
