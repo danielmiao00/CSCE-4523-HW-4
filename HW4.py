@@ -112,22 +112,16 @@ def employeePerformance():
     # Get user input for employee
     employeeName = input("Enter the name employee or performance check: ")
 
+
+
     # Display the supplier for the given country
     print(f"Current availability for {employeeName} shown below.")
-    executeSelect(f"SELECT I.NAME as 'Name', I.ROASTING_TYPE as 'Roasting Type', COUNT(I.NAME) as 'Sales Count' FROM Sales M LEFT JOIN Item I ON I.ID = M.ITEM_ID LEFT JOIN Employee E ON E.ID = M.EMPLOYEE_ID WHERE E.NAME = '{employeeName}' GROUP BY I.NAME, I.ROASTING_TYPE;")
+    employeeResult = executeSelect(f"SELECT I.NAME as 'Name', I.ROASTING_TYPE as 'Roasting Type', COUNT(I.NAME) as 'Sales Count' FROM Sales M LEFT JOIN Item I ON I.ID = M.ITEM_ID LEFT JOIN Employee E ON E.ID = M.EMPLOYEE_ID WHERE E.NAME = '{employeeName}' GROUP BY I.NAME, I.ROASTING_TYPE;", (I.NAME))
 
 
 def updateItem():
-    coffeeNames = ["ANTIGUA", "HAMBELA KIRITE", "KHAWLANI", "MOGIANA", "ALWADI", "VOLCANICA SUPREMO", "PNG",
-                   "SUMATRA GAYO", "ARABICA", "GENERAL MERCHANDISE", "SIDAMO", "GHIMBI", "ALDURRAR"]
-
-    # Get the item name to update
+    #Get the item name to update
     itemName = input("Enter the name of the item to update: ")
-    itemName = itemName.upper()
-    if itemName not in coffeeNames:
-        print(f"{itemName} does not exist in the inventory.")
-        return
-
     supplierID = int(input("Enter the supplier ID of the item: "))
 
     #Flag for while loop; while the flag is false (or not an integer), loop for a valid input
