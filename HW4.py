@@ -118,14 +118,10 @@ def employeePerformance():
 
 
 def updateItem():
-<<<<<<< HEAD
     coffeeNames = ["ANTIGUA", "HAMBELA KIRITE", "KHAWLANI", "MOGIANA", "ALWADI", "VOLCANICA SUPREMO", "PNG",
                    "SUMATRA GAYO", "ARABICA", "GENERAL MERCHANDISE", "SIDAMO", "GHIMBI", "ALDURRAR"]
 
     # Get the item name to update
-=======
-    #Get the item name to update
->>>>>>> b2106df0ac7cccb5e85c165f16e6fd1c9f185722
     itemName = input("Enter the name of the item to update: ")
     itemName = itemName.upper()
     if itemName not in coffeeNames:
