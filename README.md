@@ -1,1 +1,1 @@
-# CSCE-4523-HW-4
+#Create a python script which interacts with an sql database in multiple ways
