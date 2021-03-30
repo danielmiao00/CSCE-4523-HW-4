@@ -245,14 +245,6 @@ def close_db():  # use this function to close db
     cursor.close()
     conn.close()
 
-
-##### Test #######
-mysql_username = 'dmiao'  # MYSQL Username
-mysql_password = 'bieYuj0b'  # MYSQL Password
-mysql_host = 'turing.uark.edu'
-
-open_database(mysql_host, mysql_username, mysql_password, mysql_username)  # open database
-
 def main():
     #Menu creation
     menu()
@@ -291,5 +283,13 @@ def main():
 
     # Close database
     close_db()
+
+
+##### Test #######
+mysql_username = 'dmiao'  # MYSQL Username
+mysql_password = 'bieYuj0b'  # MYSQL Password
+mysql_host = 'turing.uark.edu'
+
+open_database(mysql_host, mysql_username, mysql_password, mysql_username)  # open database
 
 main()
