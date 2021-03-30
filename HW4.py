@@ -201,8 +201,7 @@ def cancelSales():
     try:
         cancelID = int(cancelID)
     except ValueError:
-        print("""{cancelID} is a string, not an integer value.
-        Returning to main menu.""")
+        print(f"{cancelID} is a string, not an integer value. Returning to main menu.")
         return
 
     #Display Updated Table
