@@ -253,44 +253,43 @@ mysql_host = 'turing.uark.edu'
 
 open_database(mysql_host, mysql_username, mysql_password, mysql_username)  # open database
 
-
-#Menu creation
-menu()
-
-#Check if input is a valid int
-numInt = False
-while numInt == False:
-    select = input("Enter Option: ")
-    try:
-        select = int(select)
-        numInt = True
-    except ValueError:
-        print("Input is invalid\n")
-        menu()
-
-
-#Check if int input is on the list
-while select != 6:
-    if select == 1:
-        supplierCountry()
-    elif select == 2:
-        addSupplier()
-    elif select == 3:
-        employeePerformance()
-    elif select == 4:
-        updateItem()
-    elif select == 5:
-        cancelSales()
-    else:
-        print("Invalid Option\n")
-
-    #Reprint if invalid
+def main():
+    #Menu creation
     menu()
-    select = int(input("Enter Option: "))
 
-# Close database
-close_db()
+    #Check if int input is on the list
+    loop = True
+    while loop is True:
+        #Check if input is a valid int
+        numInt = False
+        while numInt == False:
+            select = input("Enter Option: ")
+            try:
+                select = int(select)
+                numInt = True
+            except ValueError:
+                print("String detected. Please use numbers 1-6 to select an option.\n")
+                menu()
 
+        if select == 1:
+            supplierCountry()
+        elif select == 2:
+            addSupplier()
+        elif select == 3:
+            employeePerformance()
+        elif select == 4:
+            updateItem()
+        elif select == 5:
+            cancelSales()
+        elif select == 6:
+            print("Exiting. Goodbye!")
+            loop = False
+            quit()
+        else:
+            print(f"{select} is not an option. Please select a valid option from the menu.\n")
+            menu()
 
+    # Close database
+    close_db()
 
-
+main()
