@@ -151,8 +151,9 @@ def updateItem():
 
     supplierFlag = False
     while supplierFlag == False:
-        supplierID = int(input("Please enter the ID this supplier: "))
+        supplierID = input("Please enter the ID this supplier: ")
         try:
+            supplierID = int(supplierID)
             #Test input against Supplier database
             executeOnly(f"SELECT SUPPLIER_ID FROM Supplier WHERE SUPPLIER_ID = {supplierID};")
             
@@ -197,6 +198,12 @@ def updateItem():
 def cancelSales():
     #Get user input for transaction to cancel
     cancelID = input("Enter transaction ID to cancel: ")
+    try:
+        cancelID = int(cancelID)
+    except ValueError:
+        print("""{cancelID} is a string, not an integer value.
+        Returning to main menu.""")
+        return
 
     #Display Updated Table
     print("\nPrinting transaction.")
