@@ -253,12 +253,11 @@ def close_db():  # use this function to close db
     conn.close()
 
 def main():
-    #Menu creation
-    menu()
 
     #Check if int input is on the list
     loop = True
     while loop is True:
+        menu()
         #Check if input is a valid int
         numInt = False
         while numInt == False:
@@ -286,7 +285,6 @@ def main():
             quit()
         else:
             print(f"{select} is not an option. Please select a valid option from the menu.\n")
-            menu()
 
     # Close database
     close_db()
