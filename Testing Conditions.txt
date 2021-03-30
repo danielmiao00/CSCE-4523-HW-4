@@ -1,0 +1,57 @@
+Q1
+Yemen
+Germany
+1b
+Alwaldi
+
+Q2
+Name: Mercon
+Number: +50200011
+Country: Guatemala
+Coffee: Alwadi
+Supply: 123
+
+Name: Global Beans
+Number: +339506879
+Country: France
+Coffee: PNG
+Supply: asdf
+Supply: 15
+
+Name: 1234
+Number: asdf
+Country: 1234
+Coffee: Mogiana 
+Supply: asdf
+
+
+Q3
+Jamal
+Emily
+Kiara
+1234
+Asdf
+
+Q4
+Item Name: Antigua
+Quantity Update: 50
+Supplier_ID: 14
+
+Item Name: Antigua
+Quantity Update: asdf   *this condition crashes*
+Supplier_ID: asdf
+
+Item Name: Robusta
+Update: N/A
+
+Item Name: 1234
+Update: N/A
+
+Q5
+Transaction Cancel: 1001
+
+Transaction Cancel: 1014
+
+Transaction Cancel: Asdf	*this condition crashes*
+
+Transaction Cancel: 9999	
