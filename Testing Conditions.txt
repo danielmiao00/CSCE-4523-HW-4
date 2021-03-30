@@ -1,16 +1,19 @@
-Q1
+Q1 (Should have no issues)
 Yemen
 Germany
 1b
 Alwaldi
 
-Q2
+
+Q2 (Name, number, country should have no issues. Check when coffee name is incorrect and when supply amount is not int)
+*Base Condition*
 Name: Mercon
 Number: +50200011
 Country: Guatemala
 Coffee: Alwadi
 Supply: 123
 
+*Check when quantity is string*
 Name: Global Beans
 Number: +339506879
 Country: France
@@ -18,36 +21,53 @@ Coffee: PNG
 Supply: asdf
 Supply: 15
 
+*Check when coffe name is incorrect*
 Name: 1234
 Number: asdf
 Country: 1234
-Coffee: Mogiana 
-Supply: asdf
+Coffee: 1234
+Coffee: asdf
+Coffee: Alwadi 
+Supply: 44
 
 
-Q3
+Q3 (Should have no issues)
 Jamal
 Emily
 Kiara
 1234
 Asdf
 
-Q4
+
+Q4 (Check when item name is wrong, quantity is string, and supplier ID is string)
+*Base Condition*
 Item Name: Antigua
+Supplier_ID: 1
 Quantity Update: 50
-Supplier_ID: 14
 
-Item Name: Antigua
-Quantity Update: asdf   *this condition crashes*
-Supplier_ID: asdf
 
+*Next two check when name is wrong*
 Item Name: Robusta
 Update: N/A
 
 Item Name: 1234
 Update: N/A
 
-Q5
+*Check when supplier id is a string*
+Item Name: PNG
+Supplier_ID: asdf *this condition crashes*
+Supplier_ID: 9
+Quantity Update: 25
+
+*Check when quantity update is string*
+Item Name: PNG
+Supplier_ID: 9
+Quantity Update: asdf   
+Quantity Update: 76
+
+Q5 (Check when transaction int is string and when item has already been called)
+Transaction Cancel: 1001
+*Once more to see when item has been reversed*
 Transaction Cancel: 1001
 
 Transaction Cancel: 1014
